@@ -1,5 +1,7 @@
 #include <substrate.h>
 
+UIKIT_EXTERN BOOL _UIApplicationUsesLegacyUI();
+
 typedef  struct { 
         unsigned int deactivatingReasonFlags : 8; 
         unsigned int isSuspended : 1; 
@@ -121,6 +123,9 @@ typedef  struct {
 - (void)_fetchInfoPlistFlags {
 
     %orig;
+
+    if (_UIApplicationUsesLegacyUI())
+        return;
 
     ApplicationFlags &_applicationFlags = MSHookIvar<ApplicationFlags>(self, "_applicationFlags");
 
