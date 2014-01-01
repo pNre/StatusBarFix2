@@ -92,6 +92,7 @@ typedef  struct {
 @interface UIApplication (Custom)
 
 - (BOOL)UIApplicationIsSystemApplication;
+- (BOOL)_isSpringBoard;
 
 @end
 
@@ -124,13 +125,13 @@ typedef  struct {
 
     %orig;
 
-    if (_UIApplicationUsesLegacyUI())
+    if (_UIApplicationUsesLegacyUI() || [self _isSpringBoard])
         return;
 
     ApplicationFlags &_applicationFlags = MSHookIvar<ApplicationFlags>(self, "_applicationFlags");
 
     if (![[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIViewControllerBasedStatusBarAppearance"]) {
-		_applicationFlags.viewControllerBasedStatusBarAppearance = ![self UIApplicationIsSystemApplication];
+        _applicationFlags.viewControllerBasedStatusBarAppearance = ![self UIApplicationIsSystemApplication];
     }
 
 }
