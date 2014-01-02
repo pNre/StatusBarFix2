@@ -3,7 +3,7 @@
 UIKIT_EXTERN BOOL _UIApplicationUsesLegacyUI();
 
 typedef  struct { 
-        unsigned int deactivatingReasonFlags : 8; 
+    unsigned int deactivatingReasonFlags : 8; 
         unsigned int isSuspended : 1; 
         unsigned int isSuspendedEventsOnly : 1; 
         unsigned int isLaunchedSuspended : 1; 
@@ -86,7 +86,7 @@ typedef  struct {
         unsigned int legibilityAccessibilitySettingEnabled : 1; 
         unsigned int viewControllerBasedStatusBarAppearance : 1; 
         unsigned int fakingRequiresHighResolution : 1; 
-        unsigned int isStatusBarFading : 1; 
+        unsigned int isStatusBarFading : 1;
 } ApplicationFlags;
 
 @interface UIApplication (Custom)
@@ -101,23 +101,23 @@ typedef  struct {
 %new
 - (BOOL)UIApplicationIsSystemApplication {
 
-	NSURL * bundleURL = [[NSBundle mainBundle] bundleURL];
+    NSURL * bundleURL = [[NSBundle mainBundle] bundleURL];
 
-	if (![bundleURL isFileURL])
+    if (![bundleURL isFileURL])
+        return NO;
+
+    if (![[bundleURL path] isAbsolutePath])
 		return NO;
 
-	if (![[bundleURL path] isAbsolutePath])
-		return NO;
+    NSArray * components = [[[bundleURL path] stringByResolvingSymlinksInPath] pathComponents];
 
-	NSArray * components = [[bundleURL path] pathComponents];
+    if ([components count] >= 2) {
 
-	if ([components count] >= 2) {
+        return [[components objectAtIndex:([components count] - 2)] hasPrefix:@"Applications"];
 
-		return [[components objectAtIndex:([components count] - 2)] isEqualToString:@"Applications"];
+    }
 
-	}
-
-	return NO;
+    return NO;
 
 }
 
@@ -130,9 +130,13 @@ typedef  struct {
 
     ApplicationFlags &_applicationFlags = MSHookIvar<ApplicationFlags>(self, "_applicationFlags");
 
-    if (![[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIViewControllerBasedStatusBarAppearance"]) {
+    NSDictionary * infoDictionary = [[NSBundle mainBundle] infoDictionary];
+
+    if (![infoDictionary objectForKey:@"UIViewControllerBasedStatusBarAppearance"])
         _applicationFlags.viewControllerBasedStatusBarAppearance = ![self UIApplicationIsSystemApplication];
-    }
+
+    if ([[infoDictionary objectForKey:@"CFBundleIdentifier"] caseInsensitiveCompare:@"com.apple.passbook"] == NSOrderedSame)
+        [self setStatusBarStyle:UIStatusBarStyleLightContent];
 
 }
 
