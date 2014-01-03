@@ -135,8 +135,11 @@ typedef  struct {
     if (![infoDictionary objectForKey:@"UIViewControllerBasedStatusBarAppearance"])
         _applicationFlags.viewControllerBasedStatusBarAppearance = ![self UIApplicationIsSystemApplication];
 
-    if ([[infoDictionary objectForKey:@"CFBundleIdentifier"] caseInsensitiveCompare:@"com.apple.passbook"] == NSOrderedSame)
+    if ([[infoDictionary objectForKey:@"CFBundleIdentifier"] caseInsensitiveCompare:@"com.apple.passbook"] == NSOrderedSame) {
+        int &_statusBarRequestedStyle = MSHookIvar<int>(self, "_statusBarRequestedStyle");
+        _statusBarRequestedStyle = UIStatusBarStyleLightContent;
         [self setStatusBarStyle:UIStatusBarStyleLightContent];
+    }
 
 }
 
