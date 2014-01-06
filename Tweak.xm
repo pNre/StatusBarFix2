@@ -44,8 +44,6 @@ BOOL UIApplicationIsSystemApplication_JB() {
             return YES;
         else if (![[components objectAtIndex:([components count] - 3)] hasPrefix:@"AppleInternal"])
             return NO;
-        else
-            return [[components objectAtIndex:([components count] - 2)] hasPrefix:@"Applications"];
 
     }
 
