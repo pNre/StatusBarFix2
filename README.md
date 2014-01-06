@@ -1,6 +1,10 @@
 StatusBarFix2
 ==============
 
+A CydiaSubstrate tweak to fix jailbroken iOS7 status bar.
+
+---
+
 To install:
 
 1. Add `repo.pnre.co.vu` as a new source in Cydia
