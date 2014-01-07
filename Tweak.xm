@@ -4,7 +4,6 @@
 #define UIKIT_VERSION (NSVersionOfLinkTimeLibrary("UIKit") >> 16)
 
 #define UIKIT_70 0xB57
-#define UIKIT_71 0xB77
 
 const char * sIsSystemApplicationSymbol() {
 
@@ -13,7 +12,7 @@ const char * sIsSystemApplicationSymbol() {
         if (UIKIT_VERSION == UIKIT_70)
             return "__MergedGlobals3336";
         else
-            return "__MergedGlobals3384";
+            return "__UIApplicationIsSystemApplication.sIsSystemApplication";
 
     #else
 
