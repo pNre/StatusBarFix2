@@ -63,7 +63,17 @@ void UIApplicationIsSystemApplication_JB_block(void) {
         return;
     }
 
-    *((BOOL *)sIsSystemApplication) = UIApplicationIsSystemApplication_JB();
+    BOOL s = UIApplicationIsSystemApplication_JB();
+
+    #ifdef __LP64__
+
+    ((BOOL *)sIsSystemApplication)[15] = s;
+
+    #else
+
+    *((BOOL *)sIsSystemApplication) = s;
+
+    #endif
 
 }
 
