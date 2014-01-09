@@ -4,19 +4,28 @@
 #define UIKIT_VERSION (NSVersionOfLinkTimeLibrary("UIKit") >> 16)
 
 #define UIKIT_70 0xB57
+#define UIKIT_71 0xB77
 
-const char * sIsSystemApplicationSymbol() {
+const char * sIsSystemApplicationSymbol(MSImageRef UIKitRef) {
 
     #ifdef __LP64__
 
         if (UIKIT_VERSION == UIKIT_70)
-            return "__MergedGlobals3336";
+            return "__MergedGlobals3336";   //  7.0.4, armv8
+        else if (UIKIT_VERSION == UIKIT_71) {
+
+            if (MSFindSymbol(UIKitRef, "__MergedGlobals3384"))
+                return "__MergedGlobals3384";   //  7.1b2, armv8
+            else
+                return "__MergedGlobals3393";   //  7.1b3, armv8
+
+        }
         else
             return "__UIApplicationIsSystemApplication.sIsSystemApplication";
 
     #else
 
-        return "__UIApplicationIsSystemApplication.sIsSystemApplication";
+        return "__UIApplicationIsSystemApplication.sIsSystemApplication";   //  *, armv7(s)
 
     #endif
 
@@ -57,7 +66,7 @@ void UIApplicationIsSystemApplication_JB_block(void) {
     if (!UIKitRef)
         return;
 
-    void * sIsSystemApplication = MSFindSymbol(UIKitRef, sIsSystemApplicationSymbol());
+    void * sIsSystemApplication = MSFindSymbol(UIKitRef, sIsSystemApplicationSymbol(UIKitRef));
 
     if (!sIsSystemApplication) {
         return;
@@ -67,8 +76,14 @@ void UIApplicationIsSystemApplication_JB_block(void) {
 
     #ifdef __LP64__
 
+    if (UIKIT_VERSION == UIKIT_70)
+    
     ((BOOL *)sIsSystemApplication)[15] = s;
-
+    
+    else if (UIKIT_VERSION == UIKIT_71)
+    
+    ((BOOL *)sIsSystemApplication)[17] = s;
+    
     #else
 
     *((BOOL *)sIsSystemApplication) = s;
