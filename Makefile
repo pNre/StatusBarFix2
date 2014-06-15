@@ -9,7 +9,6 @@ export ARCHS = armv7 arm64
 TWEAK_NAME = StatusBarFix2
 StatusBarFix2_FILES = Tweak.xm
 StatusBarFix2_FRAMEWORKS = UIKit
+StatusBarFix2_LIBRARIES = substrate
 
 include $(THEOS_MAKE_PATH)/tweak.mk
-
-

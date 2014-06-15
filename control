@@ -1,6 +1,6 @@
 Package: com.pnre.statusbarfix2
 Name: StatusBarFix2
-Depends: mobilesubstrate, firmware (>= 7)
+Depends: mobilesubstrate, firmware (>= 7), cydia (< 1.1.10)
 Version: 0.1.2
 Architecture: iphoneos-arm
 Description: Fix status bar not turning white.
